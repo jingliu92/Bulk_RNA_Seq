@@ -44,7 +44,10 @@ for file in *.fq.gz; do
 {
 SolexaQA++ dynamictrim ${file}__1.fq.gz ${file}__1.fq.gz \
 -h 20 \
--d trimmed_data
+-d trimmed_data/ \
+SolexaQA++ lengthsort ${file}__1.fq.trimmed.gz ${file}__2.fq.trimmed.gz \
+-l 60 \
+-d ength_sorted/
 };
 done
 ```
