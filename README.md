@@ -44,7 +44,7 @@ for file in *.fq.gz; do
 {
 SolexaQA++ dynamictrim ${file}__1.fq.gz ${file}__1.fq.gz \
 -h 20 \
--d rimmed_data
+-d trimmed_data
 };
 done
 ```
