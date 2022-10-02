@@ -25,6 +25,7 @@ fastqc -o fastqc/ -f fastq ../FRG_RNAseq/rawdata/*.fq.gz
 
 ## SolexaQA++
 
+```
 mkdir trimmed_data
 
 #!/bin/bash
@@ -39,13 +40,13 @@ cd ../FRG_RNAseq/rawdata
 
 module load solexaqa
 
-SolexaQA++ dynamictrim forward.fq.gz reverse.fq.gz -h 20 -d ../trimmed_data
-SolexaQA++ lengthsort /trimmed_data/forward.fq.trimmed.gz /trimmed_data/reverse.fq.trimmed.gz \
--l 60 -d ../rawdata/length_sorted
-
 for file in *.fq.gz; do
 {
-SolexaQA++ dynamictrim ${file}__1.fq.gz ${file}__1.fq.gz
+SolexaQA++ dynamictrim ${file}__1.fq.gz ${file}__1.fq.gz \
+-h 20 \
+-d ../../RNA-Seq/rimmed_data
+}
+```
 
 -x /home/usrname/DGE_Virtual_Oct2020/human_reference/hisat2_index/GRCh38.p12.genome \
 -U ${file} \
