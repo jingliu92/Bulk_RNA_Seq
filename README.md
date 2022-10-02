@@ -17,3 +17,10 @@ mkdir fastqc
 module load fastqc
 
 fastqc -o fastqc/ -f fastq ../FRG_RNAseq/rawdata/*.fq.gz
+# -o -> Create all output files in the specified output directory
+# -f -> Bypasses the normal sequence file format detection and forces the program to use the specified format.Valid formats are bam,sam,bam_mapped,sam_mapped and fastq
+# *.fq.gz -> Will run FASTQC for all files in the current folder that ends with .fq.gz
+```
+
+## SolexaQA++
+
