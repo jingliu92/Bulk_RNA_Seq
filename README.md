@@ -36,7 +36,7 @@ mkdir trimmed_data
 #SBATCH --mail-user=jing.liu12@okstate.edu
 #SBATCH --mail-type=ALL
 
-cd ../FRG_RNAseq/rawdata
+cd rawdata
 
 module load solexaqa
 
@@ -44,15 +44,8 @@ for file in *.fq.gz; do
 {
 SolexaQA++ dynamictrim ${file}__1.fq.gz ${file}__1.fq.gz \
 -h 20 \
--d ../../RNA-Seq/rimmed_data
-}
+-d rimmed_data
+};
+done
 ```
 
--x /home/usrname/DGE_Virtual_Oct2020/human_reference/hisat2_index/GRCh38.p12.genome \
--U ${file} \
---threads 4 \
--S /home/usrname/DGE_Virtual_Oct2020/hisat2_alignments_subset/${file}.sam; done
-
-for i in {94..95};do
-{
-#SolexaQA++ dynamictrim HC03028${i}-HC03028${i}_combined_R1.fastq.gz HC03028${i}-HC03028${i}_combined_R2.fastq.gz -h 20 -d /projects/dsn001/Rivera_HIC_Collaboration_human/198.2.192.40:2129/CGTPJLL220126-RNA/trimmed_data/
