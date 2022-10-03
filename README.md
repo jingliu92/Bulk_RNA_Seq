@@ -122,7 +122,7 @@ SolexaQA++ lengthsort trimmed_data/OG${file}_L_1.fq.trimmed.gz trimmed_data/OG${
 };
 done
 ```
-# Build a genome index/database
+# Build a genome index/database 
 ```
 cd mus_reference/
 mkdir hisat2_index
@@ -143,8 +143,18 @@ module load hisat2
 hisat2-build GCF_000001635.27_GRCm39_genomic.fna hisat2_index/GRCm39_genomic
 ```
 # Extract splicesites from gff file
-Here we use `hisat2_extract_splice_sites.py` to extract splicesites from gff file https://github.com/DaehwanKimLab/hisat2/blob/master/hisat2_extract_splice_sites.py
+Here we use `hisat2_extract_splice_sites.py` to extract splicesites from Gff file https://github.com/DaehwanKimLab/hisat2/blob/master/hisat2_extract_splice_sites.py
 
 ```
+#!/bin/bash
+#SBATCH -p batch
+#SBATCH -t 120:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=32
+#SBATCH --mail-user=jing.liu12@okstate.edu
+#SBATCH --mail-type=end
 
+module load hisat2
+python hisat2_extract_splice_sites.py /mus_reference/genomic.gff > splicesites.txt
+```
 
