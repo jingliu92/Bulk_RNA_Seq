@@ -174,8 +174,38 @@ for i in {1..4};do
 {
 hisat2 -p 12 --mp 6,6 --score-min L,0,-0.2 --dta-cufflinks --rna-strandness RF \
 -x ../../mus_reference/hisat2_index/GRCm39_genomic \
--1 OG${file}_B_1.fq.trimmed.paired.gz \
--2 OG${file}_B_2.fq.trimmed.paired.gz \
--S ../sam_files/OG${file}_B.sam
+-1 OG${i}_B_1.fq.trimmed.paired.gz \
+-2 OG${i}_B_2.fq.trimmed.paired.gz \
+-S ../sam_files/OG${i}_B.sam
+};
+done
+
+for i in {1..4};do
+{
+hisat2 -p 12 --mp 6,6 --score-min L,0,-0.2 --dta-cufflinks --rna-strandness RF \
+-x ../../mus_reference/hisat2_index/GRCm39_genomic \
+-1 OG${i}_L_1.fq.trimmed.paired.gz \
+-2 OG${i}_L_2.fq.trimmed.paired.gz \
+-S ../sam_files/OG${i}_L.sam
+};
+done
+
+for i in {1..4};do
+{
+hisat2 -p 12 --mp 6,6 --score-min L,0,-0.2 --dta-cufflinks --rna-strandness RF \
+-x ../../mus_reference/hisat2_index/GRCm39_genomic \
+-1 OC${i}_B_1.fq.trimmed.paired.gz \
+-2 OC${i}_B_2.fq.trimmed.paired.gz \
+-S ../sam_files/OC${i}_B.sam
+};
+done
+
+for i in {1..4};do
+{
+hisat2 -p 12 --mp 6,6 --score-min L,0,-0.2 --dta-cufflinks --rna-strandness RF \
+-x ../../mus_reference/hisat2_index/GRCm39_genomic \
+-1 OC${i}_L_1.fq.trimmed.paired.gz \
+-2 OC${i}_L_2.fq.trimmed.paired.gz \
+-S ../sam_files/OC${i}_L.sam
 };
 done
