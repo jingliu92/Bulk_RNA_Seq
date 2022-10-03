@@ -209,3 +209,30 @@ hisat2 -p 12 --mp 6,6 --score-min L,0,-0.2 --dta-cufflinks --rna-strandness RF \
 -S ../sam_files/OC${i}_L.sam
 };
 done
+
+```
+
+# Use Samtools to convert to coordinate sorted bam files
+
+## Fisrt convert SAM file to BAM file
+```
+#!/bin/bash
+#SBATCH -p batch
+#SBATCH -t 120:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=32
+#SBATCH --mail-user=jing.liu12@okstate.edu
+#SBATCH --mail-type=end
+
+module load samtools
+cd rawdata/sam_files/
+for i in {1..4};do
+{
+samtools view -S -b OC{i}.sam > ../bam_files/OC{i}.bam
+samtools sort -@ 12 -o /projects/dsn001/Rivera_HIC_Collaboration_human/198.2.192.40:2129/CGTPJLL220126-RNA/Bam_files_stranded/HC03028${i}.sorted.bam /projects/dsn001/Rivera_HIC_Collaboration_human/198.2.192.40:2129/CGTPJLL220126-RNA/Bam_files_stranded/HC03028${i}.bam
+};
+done
+```
+
+
+
