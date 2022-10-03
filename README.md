@@ -40,14 +40,85 @@ cd rawdata
 
 module load solexaqa
 
-for file in *.fq.gz; do
+for file in {1..4}; do
 {
-SolexaQA++ dynamictrim ${file}__1.fq.gz ${file}__1.fq.gz \
+SolexaQA++ dynamictrim OC${file}_L_1.fq.gz OC${file}_L_2.fq.gz \
 -h 20 \
--d trimmed_data/ \
-SolexaQA++ lengthsort ${file}__1.fq.trimmed.gz ${file}__2.fq.trimmed.gz \
+-d trimmed_data/
+};
+done
+
+for file in {1..4}; do
+{
+SolexaQA++ dynamictrim OG${file}_B_1.fq.gz OG${file}_B_2.fq.gz \
+-h 20 \
+-d trimmed_data/
+};
+done
+
+for file in {1..4}; do
+{
+SolexaQA++ dynamictrim OG${file}_L_1.fq.gz OG${file}_L_2.fq.gz \
+-h 20 \
+-d trimmed_data/
+};
+done
+
+for file in {1..4}; do
+{
+SolexaQA++ dynamictrim OG${file}_B_1.fq.gz OG${file}_B_2.fq.gz \
+-h 20 \
+-d trimmed_data/
+};
+done
+
+```
+
+### length sorted data
+```
+mkdir length_sorted
+
+#!/bin/bash
+#SBATCH -p batch
+#SBATCH -t 120:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=32
+#SBATCH --mail-user=jing.liu12@okstate.edu
+#SBATCH --mail-type=end
+
+cd rawdata
+
+module load solexaqa
+
+for file in {1..4}; do
+{
+SolexaQA++ lengthsort trimmed_data/OC${file}_L_1.fq.trimmed.gz trimmed_data/OC${file}_L_2.fq.trimmed.gz \
 -l 60 \
--d ength_sorted/
+-d length_sorted/
+};
+done
+
+for file in {1..4}; do
+{
+SolexaQA++ lengthsort trimmed_data/OC${file}_B_1.fq.trimmed.gz trimmed_data/OC${file}_B_2.fq.trimmed.gz \
+-l 60 \
+-d length_sorted/
+};
+done
+
+for file in {1..4}; do
+{
+SolexaQA++ lengthsort trimmed_data/OG${file}_B_1.fq.trimmed.gz trimmed_data/OG${file}_B_2.fq.trimmed.gz \
+-l 60 \
+-d length_sorted/
+};
+done
+
+for file in {1..4}; do
+{
+SolexaQA++ lengthsort trimmed_data/OG${file}_L_1.fq.trimmed.gz trimmed_data/OG${file}_L_2.fq.trimmed.gz \
+-l 60 \
+-d length_sorted/
 };
 done
 ```
