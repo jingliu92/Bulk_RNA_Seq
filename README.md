@@ -142,7 +142,7 @@ mkdir hisat2_index
 module load hisat2
 hisat2-build GCF_000001635.27_GRCm39_genomic.fna hisat2_index/GRCm39_genomic
 ```
-# Extract splicesites from gff file
+# Extract splicesites from gtf file
 Here we use `hisat2_extract_splice_sites.py` to extract splicesites from Gff file https://github.com/DaehwanKimLab/hisat2/blob/master/hisat2_extract_splice_sites.py
 
 ```
@@ -157,4 +157,25 @@ Here we use `hisat2_extract_splice_sites.py` to extract splicesites from Gff fil
 module load hisat2
 python hisat2_extract_splice_sites.py /mus_reference/genomic.gff > splicesites.txt
 ```
+# Run Alighments
+```
+#!/bin/bash
+#SBATCH -p batch
+#SBATCH -t 120:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=32
+#SBATCH --mail-user=jing.liu12@okstate.edu
+#SBATCH --mail-type=end
 
+module load hisat2
+cd rawdata/length_sorted
+
+for i in {1..4};do
+{
+hisat2 -p 12 --mp 6,6 --score-min L,0,-0.2 --dta-cufflinks --rna-strandness RF \
+-x ../../mus_reference/hisat2_index/GRCm39_genomic \
+-1 OG${file}_B_1.fq.trimmed.paired.gz \
+-2 OG${file}_B_2.fq.trimmed.paired.gz \
+-S ../sam_files/OG${file}_B.sam
+};
+done
