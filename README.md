@@ -343,7 +343,7 @@ OG2_B /scratch/jingliu/FRG_RNAseq/rawdata/final_gtf/OG2_B/OG2_B.gtf
 OG3_B /scratch/jingliu/FRG_RNAseq/rawdata/final_gtf/OG3_B/OG3_B.gtf
 OG4_B /scratch/jingliu/FRG_RNAseq/rawdata/final_gtf/OG4_B/OG4_B.gtf
 ```
-
+```
 #!/bin/bash
 #SBATCH -p batch
 #SBATCH -t 120:00:00
