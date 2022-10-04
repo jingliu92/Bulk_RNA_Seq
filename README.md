@@ -237,7 +237,7 @@ for i in {1..4};do samtools
 };
 done
 
-for i in {1..4};do
+for i in {1..4};do samtools
 {
 sort -@ 12 -o ../bam_files/OC${i}_L.sorted.bam ../bam_files/OC${i}_L.bam
 sort -@ 12 -o ../bam_files/OC${i}_B.sorted.bam ../bam_files/OC${i}_B.bam
@@ -295,17 +295,28 @@ done
 /scratch/jingliu/FRG_RNAseq/rawdata/stringtie_gtf/OG4_B.gtf
 ```
 
+```
+#!/bin/bash
+#SBATCH -p batch
+#SBATCH -t 120:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=32
+#SBATCH --mail-user=jing.liu12@okstate.edu
+#SBATCH --mail-type=end
 
+module load stringtie
 
-stringtie --merge \
--p 12 \
--G ../../mus_reference/genomic.gff \
--o stringtie_merged.gtf gtf_list.txt 
+cd rawdata/stringtie_gtf/
 
-stringtie -e -B -p 16 \
--G stringtie_merged.gtf \
--o ../final_gtf/OC${i}_L/OC${i}_L.gtf \
---rf ../bam_files/OC${i}_L.sorted.bam
+for i in {1..4};do stringtie
+{
+ --merge -p 12 -G ../../mus_reference/genomic.gff -o stringtie_merged.gtf gtf_list.txt
+ -e -B -p 16 -G stringtie_merged.gtf -o ../final_gtf/OC${i}_L/OC${i}_L.gtf --rf ../bam_files/OC${i}_L.sorted.bam
+ -e -B -p 16 -G stringtie_merged.gtf -o ../final_gtf/OC${i}_B/OC${i}_B.gtf --rf ../bam_files/OC${i}_L.sorted.bam
+ -e -B -p 16 -G stringtie_merged.gtf -o ../final_gtf/OG${i}_L/OG${i}_L.gtf --rf ../bam_files/OC${i}_L.sorted.bam
+ -e -B -p 16 -G stringtie_merged.gtf -o ../final_gtf/OG${i}_B/OG${i}_B.gtf --rf ../bam_files/OC${i}_L.sorted.bam
 };
 done
+
+
 
