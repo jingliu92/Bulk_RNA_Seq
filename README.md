@@ -214,7 +214,8 @@ done
 
 # Use Samtools to convert to coordinate sorted bam files
 
-## Fisrt convert SAM file to BAM file
+1. Convert SAM file to BAM file
+2. Sort Bam file
 ```
 #!/bin/bash
 #SBATCH -p batch
@@ -226,13 +227,103 @@ done
 
 module load samtools
 cd rawdata/sam_files/
+
 for i in {1..4};do
 {
-samtools view -S -b OC{i}.sam > ../bam_files/OC{i}.bam
-samtools sort -@ 12 -o /projects/dsn001/Rivera_HIC_Collaboration_human/198.2.192.40:2129/CGTPJLL220126-RNA/Bam_files_stranded/HC03028${i}.sorted.bam /projects/dsn001/Rivera_HIC_Collaboration_human/198.2.192.40:2129/CGTPJLL220126-RNA/Bam_files_stranded/HC03028${i}.bam
+samtools view -S -b OC${i}_L.sam > ../bam_files/OC${i}_L.bam
+samtools sort -@ 12 -o ../bam_files/OC${i}_L.sorted.bam ../bam_files/OC${i}_L.bam
+};
+done
+
+for i in {1..4};do
+{
+samtools view -S -b OC${i}_B.sam > ../bam_files/OC${i}_B.bam
+samtools sort -@ 12 -o ../bam_files/OC${i}_B.sorted.bam ../bam_files/OC${i}_B.bam
+};
+done
+
+for i in {1..4};do
+{
+samtools view -S -b OG${i}_L.sam > ../bam_files/OG${i}_L.bam
+samtools sort -@ 12 -o ../bam_files/OG${i}_L.sorted.bam ../bam_files/OG${i}_L.bam
+};
+done
+
+for i in {1..4};do
+{
+samtools view -S -b OG${i}_B.sam > ../bam_files/OG${i}_B.bam
+samtools sort -@ 12 -o ../bam_files/OG${i}_B.sorted.bam ../bam_files/$OG{i}_B.bam
 };
 done
 ```
+# Use stringtie for transcriptome assembly
 
+```
+#!/bin/bash
+#SBATCH -p batch
+#SBATCH -t 120:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=32
+#SBATCH --mail-user=jing.liu12@okstate.edu
+#SBATCH --mail-type=end
 
+module load stringtie
+
+cd rawdata/stringtie_gtf/
+
+for i in {1..4};do
+{
+stringtie -o stringtie_gtf/OC${i}_L.gtf \
+-p 16 \
+-G ../../mus_reference/genomic.gff \
+--rf ../bam_files/OC${i}_L.sorted.bam 
+stringtie --merge \
+-p 12 \
+-G ../../mus_reference/genomic.gff \
+-o ../final_gtf/OC${i}_L/OC${i}_L.gtf \
+--rf ../bam_files/OC${i}_L.sorted.bam
+};
+done
+
+for i in {1..4};do
+{
+stringtie -o stringtie_gtf/OC${i}_B.gtf \
+-p 16 \
+-G ../../mus_reference/genomic.gff \
+--rf ../bam_files/OC${i}_B.sorted.bam 
+stringtie --merge \
+-p 12 \
+-G ../../mus_reference/genomic.gff \
+-o ../final_gtf/OC${i}_B/OC${i}_B.gtf \
+--rf ../bam_files/OC${i}_B.sorted.bam
+};
+done
+
+for i in {1..4};do
+{
+stringtie -o stringtie_gtf/OG${i}_B.gtf \
+-p 16 \
+-G ../../mus_reference/genomic.gff \
+--rf ../bam_files/OG${i}_B.sorted.bam 
+stringtie --merge \
+-p 12 \
+-G ../../mus_reference/genomic.gff \
+-o ../final_gtf/OG${i}_B/OG${i}_B.gtf \
+--rf ../bam_files/OG${i}_B.sorted.bam
+};
+done
+
+for i in {1..4};do
+{
+stringtie -o stringtie_gtf/OG${i}_L.gtf \
+-p 16 \
+-G ../../mus_reference/genomic.gff \
+--rf ../bam_files/OG${i}_L.sorted.bam 
+stringtie --merge \
+-p 12 \
+-G ../../mus_reference/genomic.gff \
+-o ../final_gtf/OG${i}_L/OG${i}_L.gtf \
+--rf ../bam_files/OG${i}_L.sorted.bam
+};
+done
 
