@@ -321,8 +321,44 @@ done
 ```
 ## Generate gene and transcript count tables
 - Use `prepDE.py` to generate a count matrix for genes and transcripts
+
   Here I used a python script that downloaded online (https://ccb.jhu.edu/software/stringtie/dl/prepDE.py) to generate count tables for DE analysis
+- Make a sample list that include sampleID and full path
+  
 ```
+OC1_L /scratch/jingliu/FRG_RNAseq/rawdata/final_gtf/OC1_L/OC1_L.gtf
+OC2_L /scratch/jingliu/FRG_RNAseq/rawdata/final_gtf/OC2_L/OC2_L.gtf
+OC3_L /scratch/jingliu/FRG_RNAseq/rawdata/final_gtf/OC3_L/OC3_L.gtf
+OC4_L /scratch/jingliu/FRG_RNAseq/rawdata/final_gtf/OC4_L/OC4_L.gtf
+OG1_L /scratch/jingliu/FRG_RNAseq/rawdata/final_gtf/OG1_L/OG1_L.gtf
+OG2_L /scratch/jingliu/FRG_RNAseq/rawdata/final_gtf/OG2_L/OG2_L.gtf
+OG3_L /scratch/jingliu/FRG_RNAseq/rawdata/final_gtf/OG3_L/OG3_L.gtf
+OG4_L /scratch/jingliu/FRG_RNAseq/rawdata/final_gtf/OG4_L/OG4_L.gtf
+OC1_B /scratch/jingliu/FRG_RNAseq/rawdata/final_gtf/OC1_B/OC1_B.gtf
+OC2_B /scratch/jingliu/FRG_RNAseq/rawdata/final_gtf/OC2_B/OC2_B.gtf
+OC3_B /scratch/jingliu/FRG_RNAseq/rawdata/final_gtf/OC3_B/OC3_B.gtf
+OC4_B /scratch/jingliu/FRG_RNAseq/rawdata/final_gtf/OC4_B/OC4_B.gtf
+OG1_B /scratch/jingliu/FRG_RNAseq/rawdata/final_gtf/OG1_B/OG1_B.gtf
+OG2_B /scratch/jingliu/FRG_RNAseq/rawdata/final_gtf/OG2_B/OG2_B.gtf
+OG3_B /scratch/jingliu/FRG_RNAseq/rawdata/final_gtf/OG3_B/OG3_B.gtf
+OG4_B /scratch/jingliu/FRG_RNAseq/rawdata/final_gtf/OG4_B/OG4_B.gtf
+```
+
+#!/bin/bash
+#SBATCH -p batch
+#SBATCH -t 120:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=32
+#SBATCH --mail-user=jing.liu12@okstate.edu
+#SBATCH --mail-type=end
+
+module load python
+
+cd rawdata/final_gtf/
+
+python PrepDE.py -i sample_list.txt
+```
+# Got the gene count table for DE analysis
 
 
 
