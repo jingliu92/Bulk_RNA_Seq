@@ -311,12 +311,18 @@ cd rawdata/stringtie_gtf/
 for i in {1..4};do
 {
 stringtie --merge -p 12 -G ../../mus_reference/genomic.gff -o stringtie_merged.gtf gtf_list.txt
-stringtie -e -B -p 16 -G stringtie_merged.gtf -o ../final_gtf/OC${i}_L/OC${i}_L.gtf --rf ../bam_files/OC${i}_L.sorted.bam
-stringtie -e -B -p 16 -G stringtie_merged.gtf -o ../final_gtf/OC${i}_B/OC${i}_B.gtf --rf ../bam_files/OC${i}_L.sorted.bam
-stringtie -e -B -p 16 -G stringtie_merged.gtf -o ../final_gtf/OG${i}_L/OG${i}_L.gtf --rf ../bam_files/OC${i}_L.sorted.bam
-stringtie -e -B -p 16 -G stringtie_merged.gtf -o ../final_gtf/OG${i}_B/OG${i}_B.gtf --rf ../bam_files/OC${i}_L.sorted.bam
+stringtie -e -B -p 16 -G stringtie_merged.gtf -o ../final_gtf/OC${i}_L/OC${i}_L.gtf --rf ../bam_files/OC${i}_L.sorted.bam 
+stringtie -e -B -p 16 -G stringtie_merged.gtf -o ../final_gtf/OC${i}_B/OC${i}_B.gtf --rf ../bam_files/OC${i}_B.sorted.bam
+stringtie -e -B -p 16 -G stringtie_merged.gtf -o ../final_gtf/OG${i}_L/OG${i}_L.gtf --rf ../bam_files/OG${i}_L.sorted.bam
+stringtie -e -B -p 16 -G stringtie_merged.gtf -o ../final_gtf/OG${i}_B/OG${i}_B.gtf --rf ../bam_files/OG${i}_B.sorted.bam
 };
 done
+
+```
+## Generate gene and transcript count tables
+- Use `prepDE.py` to generate a count matrix for genes and transcripts
+  Here I used a python script that downloaded online (https://ccb.jhu.edu/software/stringtie/dl/prepDE.py) to generate count tables for DE analysis
+```
 
 
 
