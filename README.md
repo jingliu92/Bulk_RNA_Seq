@@ -273,10 +273,10 @@ cd rawdata/stringtie_gtf/
 
 for i in {1..4};do
 {
-stringtie -o stringtie_gtf/OC${i}_L.gtf \
+stringtie -o OC${i}_L.gtf \
 -p 16 \
 -G ../../mus_reference/genomic.gff \
---rf ../bam_files/OC${i}_L.sorted.bam 
+--rf ../bam_files/OC${i}_L.sorted.bam
 stringtie --merge \
 -p 12 \
 -G ../../mus_reference/genomic.gff \
@@ -285,45 +285,8 @@ stringtie --merge \
 };
 done
 
-for i in {1..4};do
-{
-stringtie -o stringtie_gtf/OC${i}_B.gtf \
--p 16 \
--G ../../mus_reference/genomic.gff \
---rf ../bam_files/OC${i}_B.sorted.bam 
-stringtie --merge \
--p 12 \
--G ../../mus_reference/genomic.gff \
--o ../final_gtf/OC${i}_B/OC${i}_B.gtf \
---rf ../bam_files/OC${i}_B.sorted.bam
+#stringtie -o ../Stringtie_gtf_stranded/HC03028${i}.gtf -p 16 -G /projects/dsn001/Rivera_HIC_Collaboration_human/198.2.192.40:2129/CGTPJLL220126-RNA/reference_genome/GCF_000001405.25_GRCh37.p13_genomic.gff --rf ../Bam_files_stranded/HC03028${i}.sorted.bam
+#stringtie --merge -p 12 -G /projects/dsn001/Rivera_HIC_Collaboration_human/198.2.192.40:2129/CGTPJLL220126-RNA/reference_genome/GCF_000001405.25_GRCh37.p13_genomic.gff -o stringtie_merged.gtf gtf_list.txt
+stringtie -e -B -p 8 -G stringtie_merged.gtf -o ../Final_gtf_stranded_correction/HC03028${i}/HC03028${i}.gtf --rf ../Bam_files_stranded/HC03028${i}.sorted.bam
 };
 done
-
-for i in {1..4};do
-{
-stringtie -o stringtie_gtf/OG${i}_B.gtf \
--p 16 \
--G ../../mus_reference/genomic.gff \
---rf ../bam_files/OG${i}_B.sorted.bam 
-stringtie --merge \
--p 12 \
--G ../../mus_reference/genomic.gff \
--o ../final_gtf/OG${i}_B/OG${i}_B.gtf \
---rf ../bam_files/OG${i}_B.sorted.bam
-};
-done
-
-for i in {1..4};do
-{
-stringtie -o stringtie_gtf/OG${i}_L.gtf \
--p 16 \
--G ../../mus_reference/genomic.gff \
---rf ../bam_files/OG${i}_L.sorted.bam 
-stringtie --merge \
--p 12 \
--G ../../mus_reference/genomic.gff \
--o ../final_gtf/OG${i}_L/OG${i}_L.gtf \
---rf ../bam_files/OG${i}_L.sorted.bam
-};
-done
-
