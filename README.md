@@ -228,35 +228,27 @@ done
 module load samtools
 cd rawdata/sam_files/
 
-for i in {1..4};do
+for i in {1..4};do samtools
 {
-samtools view -S -b OC${i}_L.sam > ../bam_files/OC${i}_L.bam
-samtools sort -@ 12 -o ../bam_files/OC${i}_L.sorted.bam ../bam_files/OC${i}_L.bam
+ view -S -b OC${i}_L.sam > ../bam_files/OC${i}_L.bam
+ view -S -b OC${i}_B.sam > ../bam_files/OC${i}_B.bam
+ view -S -b OG${i}_L.sam > ../bam_files/OG${i}_L.bam
+ view -S -b OG${i}_B.sam > ../bam_files/OG${i}_B.bam
 };
 done
 
 for i in {1..4};do
 {
-samtools view -S -b OC${i}_B.sam > ../bam_files/OC${i}_B.bam
-samtools sort -@ 12 -o ../bam_files/OC${i}_B.sorted.bam ../bam_files/OC${i}_B.bam
+sort -@ 12 -o ../bam_files/OC${i}_L.sorted.bam ../bam_files/OC${i}_L.bam
+sort -@ 12 -o ../bam_files/OC${i}_B.sorted.bam ../bam_files/OC${i}_B.bam
+sort -@ 12 -o ../bam_files/OG${i}_L.sorted.bam ../bam_files/OG${i}_L.bam
+sort -@ 12 -o ../bam_files/OG${i}_B.sorted.bam ../bam_files/$OG{i}_B.bam
 };
 done
 
-for i in {1..4};do
-{
-samtools view -S -b OG${i}_L.sam > ../bam_files/OG${i}_L.bam
-samtools sort -@ 12 -o ../bam_files/OG${i}_L.sorted.bam ../bam_files/OG${i}_L.bam
-};
-done
-
-for i in {1..4};do
-{
-samtools view -S -b OG${i}_B.sam > ../bam_files/OG${i}_B.bam
-samtools sort -@ 12 -o ../bam_files/OG${i}_B.sorted.bam ../bam_files/$OG{i}_B.bam
-};
-done
 ```
 # Use stringtie for transcriptome assembly
+## Assemble and merge transcripts. Create gtf file for each sample
 
 ```
 #!/bin/bash
@@ -271,12 +263,39 @@ module load stringtie
 
 cd rawdata/stringtie_gtf/
 
-for i in {1..4};do
+for i in {1..4};do stringtie
 {
-stringtie -o OC${i}_L.gtf \
--p 16 \
--G ../../mus_reference/genomic.gff \
---rf ../bam_files/OC${i}_L.sorted.bam
+ -o OC${i}_L.gtf -p 16 -G ../../mus_reference/genomic.gff --rf ../bam_files/OC${i}_L.sorted.bam
+ -o OC${i}_B.gtf -p 16 -G ../../mus_reference/genomic.gff --rf ../bam_files/OC${i}_B.sorted.bam
+ -o OG${i}_L.gtf -p 16 -G ../../mus_reference/genomic.gff --rf ../bam_files/OG${i}_L.sorted.bam
+ -o OG${i}_B.gtf -p 16 -G ../../mus_reference/genomic.gff --rf ../bam_files/OG${i}_B.sorted.bam
+};
+done
+
+```
+
+### Merge gtf files
+- Create a `gtf_list.txt` which include the full path of the .gtf file that generated from above step
+```
+/scratch/jingliu/FRG_RNAseq/rawdata/stringtie_gtf/OC1_L.gtf
+/scratch/jingliu/FRG_RNAseq/rawdata/stringtie_gtf/OC2_L.gtf
+/scratch/jingliu/FRG_RNAseq/rawdata/stringtie_gtf/OC3_L.gtf
+/scratch/jingliu/FRG_RNAseq/rawdata/stringtie_gtf/OC4_L.gtf
+/scratch/jingliu/FRG_RNAseq/rawdata/stringtie_gtf/OG1_L.gtf
+/scratch/jingliu/FRG_RNAseq/rawdata/stringtie_gtf/OG2_L.gtf
+/scratch/jingliu/FRG_RNAseq/rawdata/stringtie_gtf/OG3_L.gtf
+/scratch/jingliu/FRG_RNAseq/rawdata/stringtie_gtf/OG4_L.gtf
+/scratch/jingliu/FRG_RNAseq/rawdata/stringtie_gtf/OC1_B.gtf
+/scratch/jingliu/FRG_RNAseq/rawdata/stringtie_gtf/OC2_B.gtf
+/scratch/jingliu/FRG_RNAseq/rawdata/stringtie_gtf/OC3_B.gtf
+/scratch/jingliu/FRG_RNAseq/rawdata/stringtie_gtf/OC4_B.gtf
+/scratch/jingliu/FRG_RNAseq/rawdata/stringtie_gtf/OG1_B.gtf
+/scratch/jingliu/FRG_RNAseq/rawdata/stringtie_gtf/OG2_B.gtf
+/scratch/jingliu/FRG_RNAseq/rawdata/stringtie_gtf/OG3_B.gtf
+/scratch/jingliu/FRG_RNAseq/rawdata/stringtie_gtf/OG4_B.gtf
+```
+
+
 
 stringtie --merge \
 -p 12 \
