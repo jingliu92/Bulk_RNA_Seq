@@ -307,10 +307,10 @@ done
 module load stringtie
 
 cd rawdata/stringtie_gtf/
+stringtie --merge -p 12 -G ../../mus_reference/genomic.gff -o stringtie_merged.gtf gtf_list.txt
 
 for i in {1..4};do
 {
-stringtie --merge -p 12 -G ../../mus_reference/genomic.gff -o stringtie_merged.gtf gtf_list.txt
 stringtie -e -B -p 16 -G stringtie_merged.gtf -o ../final_gtf/OC${i}_L/OC${i}_L.gtf --rf ../bam_files/OC${i}_L.sorted.bam 
 stringtie -e -B -p 16 -G stringtie_merged.gtf -o ../final_gtf/OC${i}_B/OC${i}_B.gtf --rf ../bam_files/OC${i}_B.sorted.bam
 stringtie -e -B -p 16 -G stringtie_merged.gtf -o ../final_gtf/OG${i}_L/OG${i}_L.gtf --rf ../bam_files/OG${i}_L.sorted.bam
