@@ -12,7 +12,7 @@ mkdir fastqc
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=32
 #SBATCH --mail-user=jing.liu12@okstate.edu
-#SBATCH --mail-type=end
+#SBATCH --mail-type=All
 
 module load fastqc
 
