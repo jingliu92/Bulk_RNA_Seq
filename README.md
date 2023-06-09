@@ -361,4 +361,27 @@ python PrepDE.py -i sample_list.txt
 # Got the gene count table for DE analysis
 
 
+# GO term enrichment
+## Among our list of DE genes, which GO terms are enriched?
 
+Transcripts that are longer or more highly expressed give more statistical power for detecting differential expression between samples
+
+The same bias holds true for GO categories: categories with predominantly highly expressed or long genes are more likely to be found to be over-represented within the DEG.
+
+`GOseq`:
+
+1. determine DEG
+2. quantify likelihood of DE as a function of gene length (–> weight)
+3. statistical test of each GO category’s significance taking the DE probability into account
+Manual work-around for mouse:
+
+```
+#biocLite("org.Mm.eg.db")
+#biocLite("goseq")
+#biocLite("biomaRt")
+library(biomaRt)
+library(org.Mm.eg.db)
+library(goseq)
+library(geneLenDataBase)
+
+```
