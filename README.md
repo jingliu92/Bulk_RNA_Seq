@@ -385,3 +385,93 @@ library(goseq)
 library(geneLenDataBase)
 
 ```
+## Determine DEG
+```{r}
+# edger R analysis
+# Import gene expression maxtrix and remove duplicate rows
+```{r}
+rm(list=ls()) #Clears the existing environment before we start downstream analysis, if there is one. 
+
+# Import all sample gene count matrix remove duplicate rows.
+gene_all<- read.csv('RNA-Seq/gene_count_matrix.csv',  sep = ',',check.names = FALSE,header = T)
+
+# Find duplicate rows: 
+gene_all$gene_id[duplicated(gene_all$gene_id)]
+
+# remove duplicate IDS (here we use "SYMBOL", but it should be whatever was selected as keyType)
+gene_all = gene_all[!gene_all(ids[c("SYMBOL")]),]
+
+# Remove duplicate rows (delete lower gene count rows)
+```
+
+```{r}
+# Liver_NCD gene expression
+```{r}
+
+rm(list=ls())
+# Liver_NCD gene expression
+liver_NCD <- read.csv('RNA-Seq/Raw_data/liver_NCD.csv',  sep = ',',row.names = 1,check.names = FALSE,header = T)
+
+# Remove rowSums ==0
+liver_NCD <- liver_NCD %>% 
+  filter(if_any(where(is.numeric),~.x >0))
+
+# Specify the grouping, make sure that the order of the samples in the expression matrix and the order of the grouping are the same, with control being the first
+group_liver_NCD <- rep(c('NCD', 'NCD+CUR'), times= c(4,4))
+```
+
+# Creating a DGEList object and filter low count genes
+```{r}
+dgelist <- DGEList(counts = liver_NCD, remove.zeros = TRUE,group = group_liver_NCD)
+
+#filter low count genes by using CPM (recommended)
+keep1 <- rowSums(cpm(dgelist) > 1 ) >= 2
+summary(keep1)
+
+# We can also do this using the {edgeR} command filterByExpr().
+keep <- filterByExpr(dgelist) 
+summary(keep)
+
+dgelist <- dgelist[keep1, , keep.lib.sizes = FALSE]
+```
+
+## Normalization
+### We now need to normalise the library sizes between the samples in DGEList. This is done to minimise bias towards highly expressed genes. The {edgeR} function calcNormFactors() normalises the library sizes by finding a set of scaling factors for the library sizes that minimizes the log-fold changes between the samples for most genes. This function can be assigned directly to the DGEList object. By printing the normalisation factors for the samples (dgelist$samples$norm.factors) before and after assigning calcNormFactors() to the DGEList object, we can see the effect of this command.
+
+```{r}
+dgelist$samples$norm.factors
+dgelist_norm <- calcNormFactors(dgelist, method = 'TMM')
+dgelist_norm <- calcNormFactors(dgelist)
+dgelist_norm$samples$norm.factors
+
+# Export normalized gene counts
+write.table(dgelist_norm$counts, 'RNA-Seq/Processed_data/liver_NCD_norm.csv', sep = ',',col.names = NA, quote = FALSE)
+```
+
+## Differential analysis
+### First approach: exact test between the two groups
+```{r}
+# Estimate dispersion
+dge.exact <- estimateCommonDisp(dgelist_norm)
+dge.exact
+plotBCV(dge.exact)
+
+# Perform the test
+dgeExactTest <- exactTest(dge.exact)
+dgeExactTest
+
+# p values are corrected with the function topTags :
+resExactTest <- topTags(dgeExactTest, n = nrow(dgeExactTest$table))
+head(resExactTest$table)
+
+#p-value and (BH) adjusted p-value distribution can be assessed with:
+par(mfrow = c(1,2))
+hist(resExactTest$table$PValue, xlab = "p-value", main = "raw p-values")
+hist(resExactTest$table$FDR, xlab = "p-value", main = "adjusted p-values")
+
+# And finally, genes with a FDR smaller than 5% and a log Fold Change larger than 1 or smaller than -1 are extracted:
+
+selectedET <- resExactTest$table$FDR < 0.05 & abs(resExactTest$table$logFC) > 2
+selectedET <- resExactTest$table[selectedET, ]
+nrow(selectedET)
+```
