@@ -16,6 +16,12 @@ Instead of analyzing individual cells, bulk RNA-seq captures the average transcr
 
 <img width="960" height="540" alt="image" src="https://github.com/user-attachments/assets/420f42b5-c6ac-4b78-972e-be34bbd26e31" />
 
+## RNA-seq Data Analysis Workflow
+In a general RNA-seq workflow, the first steps typically involve quantifying transcripts or aligning reads to a reference genome or transcriptome. Before moving forward, it’s important to perform quality control (QC) to assess the overall quality of the sequencing data. This may include checking read quality scores, detecting adapter contamination, and identifying overrepresented sequences. Trimming and filtering steps are often applied to remove low-quality reads or artifacts.
+
+Once a high-quality dataset is obtained, the next step is data normalization, which ensures that gene expression levels are comparable across samples. After normalization, you can proceed to downstream analyses, which will vary depending on your experimental goals. These may include differential expression analysis, dimensionality reduction, clustering, pathway enrichment, or other advanced statistical and biological interpretations.
+
+
 ## Install required packages
 1. Create Env
 ```
