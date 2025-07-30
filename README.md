@@ -1,4 +1,20 @@
-# RNA-Seq-Tutorial-Step-by-Step
+# Bulk RNA-Seq: Step-by-Step Tutorial
+## What Is Bulk RNA-seq?
+Bulk RNA sequencing (bulk RNA-seq) is a widely used technique to measure gene expression across an entire population of cells in a sample — such as a tissue or a cell culture.
+Instead of analyzing individual cells, bulk RNA-seq captures the average transcriptomic profile, providing insight into which genes are active under specific conditions (e.g., healthy vs. diseased).
+
+## How It Works:
+**RNA Extraction** – Total RNA is isolated from a mixed cell population
+
+**mRNA Enrichment** – Either by poly-A selection or rRNA depletion
+
+**Library Preparation** – RNA is converted to cDNA and prepped for sequencing
+
+**Sequencing** – Typically performed using Illumina platforms
+
+**Data Analysis** – Reads are aligned to a reference genome and gene expression levels are quantified
+
+
 ## Install required packages
 1. Create Env
 ```
