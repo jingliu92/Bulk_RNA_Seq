@@ -14,6 +14,7 @@ Instead of analyzing individual cells, bulk RNA-seq captures the average transcr
 
 **Data Analysis** – Reads are aligned to a reference genome and gene expression levels are quantified
 
+<img width="960" height="540" alt="image" src="https://github.com/user-attachments/assets/420f42b5-c6ac-4b78-972e-be34bbd26e31" />
 
 ## Install required packages
 1. Create Env
